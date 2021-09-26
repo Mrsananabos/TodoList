@@ -70,6 +70,18 @@ function App() {
         setTasks({...tasks})
     }
 
+    function changeTaskTitle(taskId: string, title: string, todoListID: string) {
+        let task = tasks[todoListID].find(t => t.id === taskId);
+        if (task) {
+            task.title = title;
+        }
+        setTasks({...tasks})
+    }
+
+    function changeTodoListTitle(title: string, todoListID: string) {
+        setTodoList(todoList.map(list => list.id === todoListID ? {...list, title} : list))
+    }
+
     function getTasksForTodoList(todoList: TodoListType) {
         switch (todoList.filter) {
             case "active":
@@ -107,7 +119,9 @@ function App() {
                          addTask={addTask}
                          changeFilter={changeFilter}
                          filter={tl.filter}
-                         changeStatus={changeStatus}/>
+                         changeStatus={changeStatus}
+                         changeTaskTitle={changeTaskTitle}
+                         changeTodoListTitle={changeTodoListTitle}/>
     })
 
     return (
