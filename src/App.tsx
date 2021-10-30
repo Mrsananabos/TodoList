@@ -51,7 +51,6 @@ function App() {
             title,
             isDone: false
         }
-        debugger
         setTasks({...tasks, [todoListID]: [newTask, ...tasks[todoListID]]})
     }
 
@@ -64,7 +63,7 @@ function App() {
         setTodoList(todoList.map(tl => tl.id === todoListID ? {...tl, filter: value} : tl))
     }
 
-    function changeStatus(taskId: string, status: boolean, todoListID: string) {
+    function changeTaskStatus(taskId: string, status: boolean, todoListID: string) {
         let task = tasks[todoListID].find(t => t.id === taskId);
         if (task) {
             task.isDone = status;
@@ -122,7 +121,7 @@ function App() {
                       addTask={addTask}
                       changeFilter={changeFilter}
                       filter={tl.filter}
-                      changeStatus={changeStatus}
+                      changeStatus={changeTaskStatus}
                       changeTaskTitle={changeTaskTitle}
                       changeTodoListTitle={changeTodoListTitle}/>
         </Paper>
@@ -140,8 +139,7 @@ function App() {
                         Todolists
                     </Typography>
                     <Button color={"inherit"} variant={"outlined"}>
-                        Login
-                    </Button>
+                        Login</Button>
                 </Toolbar>
             </AppBar>
             <Container fixed>
