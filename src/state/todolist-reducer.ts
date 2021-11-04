@@ -42,10 +42,13 @@ export const ChangeTodoListFilterAC = (value: FilterValuesType, todoListId: stri
 
 type ActionType = RemoveTodoListAT | AddTodoListAT | ChangeTodoListTitleAT | ChangeTodoListFilterAT
 
-export const todoListsReducers = (todoLists: Array<TodoListType>, action: ActionType): Array<TodoListType> => {
+const initialState: Array<TodoListType> = []
+
+export const todoListsReducers = (todoLists: Array<TodoListType> = initialState, action: ActionType): Array<TodoListType> => {
+    debugger
     switch (action.type) {
         case "REMOVE-TODOLIST": {
-            return todoLists.filter(list => list.id != action.todoListId)
+            return todoLists.filter(list => list.id !== action.todoListId)
         }
         case "ADD-TODOLIST": {
             const newTodoList: TodoListType = {
@@ -59,6 +62,7 @@ export const todoListsReducers = (todoLists: Array<TodoListType>, action: Action
             return todoLists.map(list => list.id === action.todoListId ? {...list, title: action.title} : list)
         }
         case "CHANGE-TODOLIST-FILTER": {
+            debugger
             return todoLists.map(tl => tl.id === action.todoListId ? {...tl, filter: action.value} : tl)
         }
         default:

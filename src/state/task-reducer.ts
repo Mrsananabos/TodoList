@@ -1,6 +1,6 @@
-import {FilterValuesType, TaskStateType, TaskType} from "../App";
-import {v1} from "uuid";
+import {TaskStateType, TaskType} from "../App";
 import {AddTodoListAT, RemoveTodoListAT} from "./todolist-reducer";
+import {v1} from "uuid";
 
 type RemoveTaskAT = {
     type: "REMOVE-TASK",
@@ -17,13 +17,6 @@ type AddTaskAT = {
 type ChangeTaskTitleAT = {
     type: "CHANGE-TASK-TITLE",
     title: string,
-    todoListId: string,
-    taskId: string
-}
-
-type ChangeTaskFilterAT = {
-    type: "CHANGE-TASK-FILTER"
-    filter: FilterValuesType,
     todoListId: string,
     taskId: string
 }
@@ -47,21 +40,19 @@ export const ChangeTaskTitleAC = (title: string, todoListId: string, taskId: str
     return {type: 'CHANGE-TASK-TITLE', title, todoListId, taskId}
 }
 
-export const ChangeTaskFilterAC = (filter: FilterValuesType, todoListId: string, taskId: string): ChangeTaskFilterAT => {
-    return {type: 'CHANGE-TASK-FILTER', filter, todoListId, taskId}
-}
-
 export const ChangeTaskStatusAC = (taskId: string, status: boolean, todoListId: string): ChangeTaskStatusAT => {
     return {type: 'CHANGE-TASK-STATUS', status, todoListId, taskId};
 }
 
-type ActionType = AddTaskAT | RemoveTaskAT | ChangeTaskFilterAT | ChangeTaskTitleAT | ChangeTaskStatusAT | AddTodoListAT
-| RemoveTodoListAT
+type ActionType = AddTaskAT | RemoveTaskAT | ChangeTaskTitleAT | ChangeTaskStatusAT | AddTodoListAT
+    | RemoveTodoListAT
 
-export const tasksReducers = (state: TaskStateType, action: ActionType): TaskStateType => {
+const initialState: TaskStateType = {}
+
+export const tasksReducers = (state: TaskStateType = initialState, action: ActionType): TaskStateType => {
     switch (action.type) {
         case "REMOVE-TASK": {
-            return {...state, [action.todoListId]: state[action.todoListId].filter(t => t.id != action.taskId)}
+            return {...state, [action.todoListId]: state[action.todoListId].filter(t => t.id !== action.taskId)}
         }
         case "ADD-TASK": {
             const newTask: TaskType = {
@@ -70,15 +61,6 @@ export const tasksReducers = (state: TaskStateType, action: ActionType): TaskSta
                 isDone: false
             }
             return {...state, [action.todoListId]: [...state[action.todoListId], newTask]}
-        }
-        case "CHANGE-TASK-FILTER": {
-            return {
-                ...state,
-                [action.todoListId]: state[action.todoListId].map(t => t.id === action.taskId ? {
-                    ...t,
-                    filter: action.filter
-                } : t)
-            }
         }
         case "CHANGE-TASK-TITLE": {
             return {
@@ -111,7 +93,7 @@ export const tasksReducers = (state: TaskStateType, action: ActionType): TaskSta
             return copyState;
         }
         default:
-            throw new Error('I need a type')
+            return state
     }
 
 }

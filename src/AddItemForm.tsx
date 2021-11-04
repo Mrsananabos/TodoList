@@ -16,7 +16,7 @@ function AddItemForm(props: AddItemFormPropsType) {
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error !== null) {setError(null)}
         if (e.charCode === 13) {
             onClickAddItem(title)
         }
@@ -24,7 +24,6 @@ function AddItemForm(props: AddItemFormPropsType) {
 
     const onClickAddItem = (title: string) => {
         if (title.trim() !== '') {
-            debugger
             props.addItem(title)
         } else {
             setError("Title is required!")
@@ -51,4 +50,4 @@ function AddItemForm(props: AddItemFormPropsType) {
 
 }
 
-export default AddItemForm
+export default React.memo(AddItemForm)
